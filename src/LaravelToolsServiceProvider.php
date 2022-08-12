@@ -2,6 +2,9 @@
 
 namespace Sedehi\LaravelTools;
 
+use Hekmatinasser\Verta\Verta;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 
 class LaravelToolsServiceProvider extends ServiceProvider
@@ -13,12 +16,37 @@ class LaravelToolsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sedehi');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'sedehi');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
-        // Publishing is only necessary when using the CLI.
+        Request::macro('queryHash', function () {
+            $data = request()->query();
+            asort($data);
+            return md5(serialize($data));
+        });
+
+        Request::macro('jalaliToCarbon', function ($field, $dateDivider = '-',$timeDivider = ':',$separator = ' ') {
+            if (request()->isNotFilled($field)) {
+                return null;
+            }
+            $date = digitsToEnglish(request()->get($field));
+            $date = explode($separator, $date);
+            $hour = $minute = $second = 0;
+            if(count($date)  == 2){
+                $time = end($date);
+                if (null !== $time) {
+                    $time = explode($timeDivider, $time);
+                    list($hour, $minute) = $time;
+                }
+            }
+            list($year, $month, $day) = explode($dateDivider,head($date));
+            return Verta::createJalali($year,$month,$day,$hour,$minute,$second);
+        });
+
+
+        Carbon::macro('toJalali', function () {
+            return verta(self::this());
+        });
+
+
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
         }
@@ -33,7 +61,6 @@ class LaravelToolsServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-tools.php', 'laravel-tools');
 
-        // Register the service the package provides.
         $this->app->singleton('laravel-tools', function ($app) {
             return new LaravelTools;
         });
@@ -56,27 +83,8 @@ class LaravelToolsServiceProvider extends ServiceProvider
      */
     protected function bootForConsole(): void
     {
-        // Publishing the configuration file.
         $this->publishes([
             __DIR__.'/../config/laravel-tools.php' => config_path('laravel-tools.php'),
         ], 'laravel-tools.config');
-
-        // Publishing the views.
-        /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/sedehi'),
-        ], 'laravel-tools.views');*/
-
-        // Publishing assets.
-        /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/sedehi'),
-        ], 'laravel-tools.views');*/
-
-        // Publishing the translation files.
-        /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/sedehi'),
-        ], 'laravel-tools.views');*/
-
-        // Registering package commands.
-        // $this->commands([]);
     }
 }

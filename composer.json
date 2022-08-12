@@ -12,7 +12,8 @@
     "homepage": "https://github.com/sedehi/laravel-tools",
     "keywords": ["Laravel", "LaravelTools"],
     "require": {
-        "illuminate/support": "~8|~9"
+        "illuminate/support": "~8|~9",
+        "hekmatinasser/verta": "^8.1"
     },
     "require-dev": {
         "phpunit/phpunit": "~8.0|~9.0",
