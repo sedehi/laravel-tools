@@ -1,0 +1,41 @@
+{
+    "name": "sedehi/laravel-tools",
+    "description": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Navid Sedehi",
+            "email": "navid.sedehi@gmail.com",
+            "homepage": "https://sedehi.ir"
+        }
+    ],
+    "homepage": "https://github.com/sedehi/laravel-tools",
+    "keywords": ["Laravel", "LaravelTools"],
+    "require": {
+        "illuminate/support": "~9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sedehi\\LaravelTools\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sedehi\\LaravelTools\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sedehi\\LaravelTools\\LaravelToolsServiceProvider"
+            ],
+            "aliases": {
+                "LaravelTools": "Sedehi\\LaravelTools\\Facades\\LaravelTools"
+            }
+        }
+    }
+}
