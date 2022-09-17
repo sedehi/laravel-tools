@@ -9,8 +9,8 @@ if (!function_exists('utf8_slug')) {
     }
 }
 
-if (!function_exists('digitsToEnglish')) {
-    function digitsToEnglish($string)
+if (!function_exists('digits_to_english')) {
+    function digits_to_english($string)
     {
         $characters = [
             // arabic
@@ -40,9 +40,14 @@ if (!function_exists('digitsToEnglish')) {
     }
 }
 
-
-if (!function_exists('digitsToEnglish')) {
-    function digitsToEnglish($string)
+if (!function_exists('mask_number_phone')) {
+    function mask_number_phone($number)
+    {
+        return substr($number, 0, 4) . str_repeat('*', (strlen($number) - 8)) . substr($number, -4);
+    }
+}
+if (!function_exists('digits_to_persian')) {
+    function digits_to_persian($string)
     {
         $characters = [
             // persian
@@ -59,4 +64,35 @@ if (!function_exists('digitsToEnglish')) {
         ];
         return str_replace(array_keys($characters), array_values($characters), $string);
     }
+}
+
+
+if (!function_exists('arabic_to_persian')) {
+function arabic_to_persian($string)
+{
+    $characters = [
+        'ك'  => 'ک',
+        'ـ'  => '',
+        'دِ' => 'د',
+        'بِ' => 'ب',
+        'زِ' => 'ز',
+        'ة' => 'ه',
+        'ذِ' => 'ذ',
+        'شِ' => 'ش',
+        'سِ' => 'س',
+        'ى'  => 'ی',
+        'ي'  => 'ی',
+        '١'  => '۱',
+        '٢'  => '۲',
+        '٣'  => '۳',
+        '٤'  => '۴',
+        '٥'  => '۵',
+        '٦'  => '۶',
+        '٧'  => '۷',
+        '٨'  => '۸',
+        '٩'  => '۹',
+        '٠'  => '۰',
+    ];
+    return str_replace(array_keys($characters), array_values($characters), $string);
+}
 }
