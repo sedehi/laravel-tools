@@ -16,32 +16,42 @@ class LaravelToolsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->requestMacros();
+        $this->carbonMacros();
+    }
 
+    private function requestMacros(): void
+    {
         Request::macro('queryHash', function () {
             $data = request()->query();
             asort($data);
             return md5(serialize($data));
         });
 
-        Request::macro('jalaliToCarbon', function ($field, $dateDivider = '-',$timeDivider = ':',$separator = ' ') {
+        Request::macro('jalaliToCarbon', function ($field, $dateDivider = '-', $timeDivider = ':', $separator = ' ') {
             if (request()->isNotFilled($field)) {
                 return null;
             }
             $date = digits_to_english(request()->get($field));
             $date = explode($separator, $date);
             $hour = $minute = $second = 0;
-            if(count($date)  == 2){
+            if (count($date) == 2) {
                 $time = end($date);
                 if (null !== $time) {
                     $time = explode($timeDivider, $time);
                     list($hour, $minute) = $time;
                 }
             }
-            list($year, $month, $day) = explode($dateDivider,head($date));
-            return Verta::createJalali($year,$month,$day,$hour,$minute,$second);
+            list($year, $month, $day) = explode($dateDivider, head($date));
+            return Verta::createJalali($year, $month, $day, $hour, $minute, $second);
         });
+    }
 
-
+    /**
+     * @return void
+     */
+    private function carbonMacros(): void
+    {
         Carbon::macro('toJalali', function () {
             return verta(self::this());
         });
