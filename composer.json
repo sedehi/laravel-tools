@@ -37,9 +37,6 @@
             "providers": [
                 "Sedehi\\LaravelTools\\LaravelToolsServiceProvider"
             ],
-            "aliases": {
-                "LaravelTools": "Sedehi\\LaravelTools\\Facades\\LaravelTools"
-            }
         }
     }
 }
