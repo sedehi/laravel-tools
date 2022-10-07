@@ -27,7 +27,7 @@ class LaravelToolsServiceProvider extends ServiceProvider
             if (request()->isNotFilled($field)) {
                 return null;
             }
-            $date = digitsToEnglish(request()->get($field));
+            $date = digits_to_english(request()->get($field));
             $date = explode($separator, $date);
             $hour = $minute = $second = 0;
             if(count($date)  == 2){
@@ -45,46 +45,6 @@ class LaravelToolsServiceProvider extends ServiceProvider
         Carbon::macro('toJalali', function () {
             return verta(self::this());
         });
-
-
-        if ($this->app->runningInConsole()) {
-            $this->bootForConsole();
-        }
     }
 
-    /**
-     * Register any package services.
-     *
-     * @return void
-     */
-    public function register(): void
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/laravel-tools.php', 'laravel-tools');
-
-        $this->app->singleton('laravel-tools', function ($app) {
-            return new LaravelTools;
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['laravel-tools'];
-    }
-
-    /**
-     * Console-specific booting.
-     *
-     * @return void
-     */
-    protected function bootForConsole(): void
-    {
-        $this->publishes([
-            __DIR__.'/../config/laravel-tools.php' => config_path('laravel-tools.php'),
-        ], 'laravel-tools.config');
-    }
 }
