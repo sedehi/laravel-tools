@@ -32,7 +32,7 @@ class LaravelToolsServiceProvider extends ServiceProvider
             if (request()->isNotFilled($field)) {
                 return null;
             }
-            $date = digits_to_english(request()->get($field));
+            $date = digits_to_english(request()->input($field));
             $date = explode($separator, $date);
             $hour = $minute = $second = 0;
             if (count($date) == 2) {
